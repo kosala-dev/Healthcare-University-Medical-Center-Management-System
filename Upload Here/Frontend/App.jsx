@@ -1,0 +1,217 @@
+//import "./App.css";
+import "react-toastify/dist/ReactToastify.css";
+import Home from "./pages/Home";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Login from "./pages/Login";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import Logout from "./components/Logout";
+import Gallery from "./pages/Gallery";
+import RegisterPatient from "./components/RegisterPatient";
+import PatientDetails from "./components/PatientDetails";
+import AllAppointments from "./components/AllAppointments";
+import AddAppointment from "./components/AddAppoinment";
+import Patientdashboard from "./components/Patientdashboard";
+import SuperAdmindashboard from "./components/SuperAdmindashboard";
+import Admindashboard from "./components/Admindashboard";
+import RegisterAdmin from "./components/RegisterAdmin";
+import MorePatientDetails from "./components/Morepatientdetails";
+import PasswordRecovery from "./components/PasswordRecovery";
+import AdminDetails from "./components/AdminDetails";
+import UserMessage from "./components/UserMessages";
+import UserChangePassword from "./components/UserChangePassword";
+import AboutUs from "./components/Aboutus";
+import Drugs from "./components/Drug";
+import Service from "./components/Service";
+import Medicalhistory from "./components/Medicalhistory";
+import Form from "./components/Form";
+import RegisterStudentadmin from "./components/RegisterPatientAdmin";
+import UpdateAdmin from "./components/UpdateAdmin";
+import SetPassword from "./components/SetPassword";
+import MedicalHistoryForm from "./components/MedicalHistoryForm";
+import UpdatePatient from "./components/PatientUpdate";
+import AddDrug from "./components/AddDrug";
+import UpdateDrug from "./components/UpdateDrug";
+import Help from "./components/Help";
+import Message from "./components/Message";
+import MedicalForm from "./components/MedicalForm";
+import MonthlyDrugReport from "./components/MonthlyDrugReport";
+
+
+
+function App() {
+  const [role, setRole] = useState("");
+  const [username, setUserName] = useState(null);
+
+  axios.defaults.withCredentials = true;
+  useEffect(() => {
+    // Function to verify user roles and credentials
+    const verifyUser = async () => {
+      try {
+        let response = await axios.get("http://localhost:8080/auth/verify");
+        if (response.data.login) {
+          setRole(response.data.role);
+          setUserName(response.data.username);
+          return;
+        }
+
+        response = await axios.get("http://localhost:8080/auth/verifypatient");
+        if (response.data.login) {
+          setRole(response.data.role);
+          setUserName(response.data.username);
+          return;
+        }
+
+        response = await axios.get("http://localhost:8080/auth/verifyadmin");
+        if (response.data.login) {
+          setRole(response.data.role);
+          setUserName(response.data.username);
+          return;
+        }
+
+        setRole("");
+        setUserName(null);
+      } catch (error) {
+        console.error("Error verifying user:", error);
+        setRole("");
+        setUserName(null);
+      }
+    };
+
+    verifyUser();
+  }, []);
+
+  return (
+    <>
+      <Router>
+        <Routes>
+          <Route
+            path="/"
+            element={<Home role={role} userId={username}></Home>}
+          ></Route>
+          <Route
+            path="/login"
+            element={<Login setRole2={setRole}></Login>}
+          ></Route>
+          <Route
+            path="/superadmindashboard"
+            element={
+              <SuperAdmindashboard username={username}></SuperAdmindashboard>
+            }
+          ></Route>
+          <Route
+            path="/logout"
+            element={<Logout setRole={setRole}></Logout>}
+          ></Route>
+          <Route path="/Gallery" element={<Gallery></Gallery>}></Route>
+          <Route
+            path="/register"
+            element={<RegisterPatient></RegisterPatient>}
+          ></Route>
+          <Route
+            path="/patientdetails"
+            element={<PatientDetails></PatientDetails>}
+          ></Route>
+          <Route
+            path="/AllAppointments"
+            element={<AllAppointments></AllAppointments>}
+          ></Route>
+          <Route
+            path="/AddAppointment"
+            element={<AddAppointment></AddAppointment>}
+          ></Route>
+          <Route
+            path="/patientdashboard"
+            element={<Patientdashboard regnum={username}></Patientdashboard>}
+          ></Route>
+          <Route
+            path="/admindashboard"
+            element={<Admindashboard username={username}></Admindashboard>}
+          ></Route>
+          <Route
+            path="/registeradmin"
+            element={<RegisterAdmin></RegisterAdmin>}
+          ></Route>
+          <Route
+            path="/morepatientdetails"
+            element={<MorePatientDetails></MorePatientDetails>}
+          ></Route>
+          <Route
+            path="/passwordrecovery"
+            element={<PasswordRecovery></PasswordRecovery>}
+          ></Route>
+          <Route
+            path="/admindetails"
+            element={<AdminDetails></AdminDetails>}
+          ></Route>
+
+          <Route
+            path="/usermessages"
+            element={<UserMessage></UserMessage>}
+          ></Route>
+          <Route
+            path="/changepassword"
+            element={<UserChangePassword></UserChangePassword>}
+          ></Route>
+          <Route
+            path="/setpassword"
+            element={<SetPassword></SetPassword>}
+          ></Route>
+          <Route path="Aboutus" element={<AboutUs></AboutUs>}></Route>
+          <Route path="/services" element={<Service></Service>}></Route>
+
+          <Route path="/drugs" element={<Drugs></Drugs>}></Route>
+          <Route
+            path="/medicalhistory"
+            element={<Medicalhistory></Medicalhistory>}
+          ></Route>
+          <Route path="medicalform" element={<Form></Form>}></Route>
+
+          <Route
+            path="/registerpatientadmin"
+            element={<RegisterStudentadmin></RegisterStudentadmin>}
+          ></Route>
+          <Route
+            path="/updateadmin"
+            element={<UpdateAdmin></UpdateAdmin>}
+          ></Route>
+          <Route
+            path="/medicalhistoryform"
+            element={<MedicalHistoryForm></MedicalHistoryForm>}
+          ></Route>
+          <Route
+            path="/updateapatient"
+            element={<UpdatePatient></UpdatePatient>}
+          ></Route>
+          <Route
+            path="/addDrugs"
+            element={<AddDrug></AddDrug>}
+          ></Route>
+          <Route
+            path="/updateDrugs"
+            element={<UpdateDrug></UpdateDrug>}
+          ></Route>
+          <Route
+            path="/Help"
+            element={<Help></Help>}
+          ></Route>
+          <Route 
+            path="/message" 
+            element={<Message />}>
+          </Route>
+          <Route 
+            path="/submit-medical" 
+            element={<MedicalForm />}>
+          </Route>
+          <Route 
+            path="/monthly-drug-report" 
+            element={<MonthlyDrugReport />}
+          />
+
+        </Routes>
+      </Router>
+    </>
+  );
+}
+
+export default App;
