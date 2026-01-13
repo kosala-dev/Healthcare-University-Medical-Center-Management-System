@@ -1,0 +1,20 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+* {
+  font-family: "", sans-serif;
+}
+
+#statusup {
+  background-color: #76dbcf;
+  outline: none;
+}
+
+* {
+  letter-spacing: normal !important;
+  word-spacing: normal !important;
+}
+
+input, textarea {
+  background-color: white !important;
+}
