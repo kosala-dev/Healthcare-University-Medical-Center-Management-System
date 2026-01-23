@@ -7,6 +7,7 @@ const patientmodel = require("../models/patient");
 const nodemailer = require("nodemailer");
 const validator = require("validator");
 
+
 // //........................................Image Uplaod in Registration Form.....................................................
 // const storage = multer.diskStorage({
 //   // Set up storage engine.
@@ -41,6 +42,8 @@ var transport = nodemailer.createTransport({
     pass: "d2073c73dc8285",
   },
 });
+
+
 
 router.post("/patientregister", async (req, res) => {
   try {

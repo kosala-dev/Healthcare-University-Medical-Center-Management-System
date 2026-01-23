@@ -1,76 +1,117 @@
 import { useState } from "react";
 import axios from "axios";
+import Swal from "sweetalert2";
 
 const PasswordRecovery = () => {
-  const [fullName, setFullName] = useState("");
+
   const [email, setEmail] = useState("");
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");
-    setSuccess("");
+
+    if (newPassword !== confirmPassword) {
+      Swal.fire("Error", "Passwords do not match", "error");
+      return;
+    }
 
     try {
-      const response = await axios.post("http://localhost:8080/password-recovery", { fullName, email });
-      setSuccess(response.data?.message || "Recovery email sent! Check your inbox.");
+      const response = await axios.post("http://localhost:8080/password-recovery", {
+        
+        email,
+        newPassword,
+        confirmPassword
+      });
+
+      Swal.fire("Success", response.data.message, "success");
+
+      // Clear form
+     
+      setEmail("");
+      setNewPassword("");
+      setConfirmPassword("");
     } catch (err) {
-      setError(err.response?.data?.message || "An error occurred. Please try again.");
+      Swal.fire(
+        "Error",
+        err.response?.data?.message || "Something went wrong",
+        "error"
+      );
     }
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
-      <div className="w-full max-w-md p-8 bg-white shadow-md rounded-lg">
-        <h1 className="text-2xl font-bold mb-4">HealthCare | Patient Password Recovery</h1>
-        <h2 className="text-xl font-semibold text-blue-500 mb-4">Patient Password Recovery</h2>
-        <p className="text-gray-600 text-sm mb-4">Please enter your Email and Full Name to recover your password.</p>
-
-        {error && <p className="text-red-500 text-sm mb-3">{error}</p>}
-        {success && <p className="text-green-500 text-sm mb-3">{success}</p>}
+    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+      <div className="w-full max-w-md p-8 bg-white shadow-lg rounded-xl">
+        <h1 className="text-2xl font-bold text-center mb-6 text-gray-800">
+          Patient Password Recovery
+        </h1>
+        <p className="text-center text-gray-600 mb-6">
+          Enter your Email, then set your new password.
+        </p>
 
         <form className="space-y-4" onSubmit={handleSubmit}>
-          {/* Full Name Input */}
+        
+          
+          {/* Email */}
           <div>
-            <label htmlFor="fullName" className="text-sm font-medium text-gray-700">Full Name</label>
-            <input
-              type="text"
-              id="fullName"
-              placeholder="Registered Full Name"
-              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-              value={fullName}
-              onChange={(e) => setFullName(e.target.value)}
-              required
-            />
-          </div>
-
-          {/* Email Input */}
-          <div>
-            <label htmlFor="email" className="text-sm font-medium text-gray-700">Email</label>
+            <label className="block text-gray-700 font-medium mb-1">
+              Email
+            </label>
             <input
               type="email"
-              id="email"
               placeholder="Registered Email"
-              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
             />
           </div>
 
-          {/* Reset Button */}
+          {/* New Password */}
+          <div>
+            <label className="block text-gray-700 font-medium mb-1">
+              New Password
+            </label>
+            <input
+              type="password"
+              placeholder="Enter New Password"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+              required
+            />
+          </div>
+
+          {/* Confirm Password */}
+          <div>
+            <label className="block text-gray-700 font-medium mb-1">
+              Confirm Password
+            </label>
+            <input
+              type="password"
+              placeholder="Confirm New Password"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              required
+            />
+          </div>
+
+          {/* Submit Button */}
           <button
             type="submit"
-            className="w-full py-2 text-sm bg-blue-500 text-white font-medium rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            className="w-full py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition"
           >
             Reset Password
           </button>
         </form>
 
-        <p className="text-sm text-gray-600 mt-4">
+        <p className="text-center text-gray-600 mt-4 text-sm">
           Already have an account?{" "}
-          <a href="/login" className="text-blue-500 hover:underline">Log-in</a>
+          <a href="/login" className="text-blue-500 hover:underline">
+            Log In
+          </a>
         </p>
       </div>
     </div>
