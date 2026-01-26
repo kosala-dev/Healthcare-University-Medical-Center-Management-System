@@ -5,6 +5,7 @@ const patientschema = new mongoose.Schema(
     regnum: { type: String, required: true, unique: true },
     fullname: { type: String, required: true },
     email: { type: String, required: true },
+    password: { type: String, required: true },
     address: { type: String, required: true },
     city: { type: String, required: true },
     course: { type: String, required: true },
@@ -12,8 +13,6 @@ const patientschema = new mongoose.Schema(
     faculty: { type: String, required: true },
     bloodgroup: { type: String, required: true },
     gender: { type: String, required: true },
-    password: { type: String, required: true },
-    //image: { type: String, required: true },
     medicalReports: [
       {
         filename: String,
@@ -23,11 +22,7 @@ const patientschema = new mongoose.Schema(
       }
     ]
   },
-  {
-    timestamps: true,
-  }
+  { timestamps: true }
 );
 
-const patientmodel = mongoose.model("patient", patientschema);
-
-module.exports = patientmodel;
+module.exports = mongoose.model("Patient", patientschema);

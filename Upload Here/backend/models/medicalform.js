@@ -1,49 +1,26 @@
 const mongoose = require("mongoose");
 
-const subjectSchema = new mongoose.Schema({
-  subject: String,
-  code: String,
-  dateOfExam: String,
-});
-
-const approvalSchema = new mongoose.Schema({
-  status: { type: String, enum: ["Pending", "Approved", "Rejected"], default: "Pending" },
-  approvedBy: String,
-  approvedAt: Date,
-  remarks: String,
-});
-
-const medicalFormSchema = new mongoose.Schema(
-  {
-    name: { type: String, required: true },
-    address: String,
-    contact: String,
-    registrationNo: { type: String, required: true },
-    field: String,
-    faculty: { type: String, required: true },
-    department: { type: String, required: true },
-    examTitle: { type: String, required: true },
-    subjects: [subjectSchema],
-    reasonType: String,
-    reason: String,
-    studentRequest: String,
-    firstAttempt: String,
-    attachedARReceipt: Boolean,
-    attachedRegisteredLetter: Boolean,
-    medicalOfficerName: String,
-    medicalOfficerTitle: String,
-    slmcRegNo: String,
-    otherDocs: String,
-    signature: String,
-
-    advisorApproval: { type: approvalSchema, default: () => ({}) },
-    adminApproval: { type: approvalSchema, default: () => ({}) },
-    hodApproval: { type: approvalSchema, default: () => ({}) },
-    deanApproval: { type: approvalSchema, default: () => ({}) },
-
-    sentToExamDept: { type: Boolean, default: false },
-  },
-  { timestamps: true }
-);
+const medicalFormSchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  address: { type: String },
+  contact: { type: String },
+  registrationNo: { type: String, required: true },
+  field: { type: String },
+  faculty: { type: String },
+  department: { type: String },
+  examTitle: { type: String },
+  subjects: { type: Array },
+  reasonType: { type: String },
+  reason: { type: String },
+  studentRequest: { type: String },
+  firstAttempt: { type: String },
+  attachedARReceipt: { type: Boolean },
+  attachedRegisteredLetter: { type: Boolean },
+  medicalOfficerName: { type: String },
+  medicalOfficerTitle: { type: String },
+  slmcRegNo: { type: String },
+  otherDocs: { type: String }, // file name
+  signature: { type: String },
+}, { timestamps: true });
 
 module.exports = mongoose.model("MedicalForm", medicalFormSchema);

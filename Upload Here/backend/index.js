@@ -1,3 +1,4 @@
+
 const express = require("express");
 const dotenv = require("dotenv");
 import("./mongodb.js");
@@ -6,7 +7,7 @@ const cookie = require("cookie-parser");
 const path = require("path");
 
 //import routes
-const Authroute = require("./routes/authroute.js");
+const Authroute = require("./routes/authRoutes.js");
 const Patientroute = require("./routes/patientroute.js");
 const Messageroute = require("./routes/msgroute.js");
 const PasswordRecoveryroute = require("./routes/passwordrecoveryroute.js");
@@ -25,6 +26,7 @@ const seed = require("./seed.js");
 const app = express();
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(
   cors({
     origin: ["http://localhost:5173"],

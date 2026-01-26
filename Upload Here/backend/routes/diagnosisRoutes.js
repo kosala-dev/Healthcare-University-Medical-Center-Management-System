@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Diagnosis = require("../models/diagnosis");
-const Drug = require("../models/Drug");
+const Drug = require("../models/drug");
 const Notification = require("../models/Notification");
 
 // Create new diagnosis

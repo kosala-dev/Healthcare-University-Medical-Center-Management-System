@@ -46,6 +46,10 @@ import MedicalFormsAdmin from "./components/MedicalFormsAdmin";
 import MedicalFormsHod from "./components/MedicalFormsHod";
 import MedicalFormsDean from "./components/MedicalFormsDean";
 import MedicalFormsPatient from "./components/MedicalFormsPatient";
+import ResetPassword from "./components/ResetPassword";
+//import MedicalForm from "./components/MedicalForm";
+
+<Route path="/medical-form" element={<MedicalForm />} />
 
 function App() {
   const [role, setRole] = useState("");
@@ -165,6 +169,8 @@ function App() {
             path="/setpassword"
             element={<SetPassword></SetPassword>}
           ></Route>
+          <Route path="/resetpassword" element={<ResetPassword></ResetPassword>} />
+
           <Route path="Aboutus" element={<AboutUs></AboutUs>}></Route>
           <Route path="/services" element={<Service></Service>}></Route>
 
@@ -236,6 +242,8 @@ function App() {
         <Route path="/medicalFormsHod" element={<MedicalFormsHod />} />
         <Route path="/medicalFormsDean" element={<MedicalFormsDean />} />
         <Route path="/medicalFormsPatient" element={<MedicalFormsPatient />} />
+        
+
         </Routes>
       </Router>
     </>

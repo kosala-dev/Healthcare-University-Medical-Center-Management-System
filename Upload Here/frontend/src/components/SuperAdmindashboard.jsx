@@ -55,7 +55,7 @@ export default function SuperAdmindashboard({ username }) {
         {/* Title Section */}
         <div className="mb-8">
           <h1 className="text-2xl font-bold text-gray-800">
-            Welcome {username}'s Dashboard
+            Welcome SuperAdmin's Dashboard
           </h1>
           <hr className="mt-2 border-t-2 border-gray-200" />
         </div>

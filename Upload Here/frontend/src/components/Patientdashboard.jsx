@@ -63,7 +63,10 @@ export default function PatientDashboard({ regnum: regnumProp }) {
     });
   };
 
-  const navigateMedicalForm = () => {
+  
+
+  // Submit / Download Medical Form (old flow)
+  const navigateSubmitDownload = () => {
     if (!patient) return;
     navigate("/submit-medical", {
       state: {
@@ -102,7 +105,7 @@ export default function PatientDashboard({ regnum: regnumProp }) {
         <div>
           <button
             onClick={() => navigate("/")}
-            className="w-full bg-white text-blue-600 py-2 px-4 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+            className="w-full bg-white text-blue-600 py-2 px-4 rounded-lg hover:bg-gray-100"
           >
             Back to home
           </button>
@@ -141,26 +144,39 @@ export default function PatientDashboard({ regnum: regnumProp }) {
               />
             </div>
             <div className="flex-1 space-y-2">
-              <h3 className="text-xl font-medium text-gray-800">
-                Full Name: {patient.fullname}
-              </h3>
-              <h4 className="text-md text-gray-700">Address: {patient.address}</h4>
-              <p className="text-md text-gray-700">City: {patient.city}</p>
-              <p className="text-md text-gray-700">Course: {patient.course}</p>
-              <p className="text-md text-gray-700">Department: {patient.department}</p>
-              <p className="text-md text-gray-700">Faculty: {patient.faculty}</p>
-              <p className="text-md text-gray-700">Blood Group: {patient.bloodgroup}</p>
-              <p className="text-md text-gray-700">Gender: {patient.gender}</p>
-              <p className="text-md text-gray-700">
-                Account Created At: {patient.createdAt}
-              </p>
+              <h3 className="text-xl font-medium">Full Name: {patient.fullname}</h3>
+              <p>Address: {patient.address}</p>
+              <p>City: {patient.city}</p>
+              <p>Course: {patient.course}</p>
+              <p>Department: {patient.department}</p>
+              <p>Faculty: {patient.faculty}</p>
+              <p>Blood Group: {patient.bloodgroup}</p>
+              <p>Gender: {patient.gender}</p>
+              <p>Account Created At: {patient.createdAt}</p>
             </div>
           </div>
         )}
 
-        {/* Buttons */}
+        {/* Buttons - ALL BLUE */}
         {patient && (
-          <div className="flex space-x-4 mb-6">
+          <div className="flex flex-wrap gap-4 mb-6">
+            <button
+              onClick={handleAppointmentClick}
+              className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700"
+            >
+              Add Appointment
+            </button>
+
+            
+
+            {/* Submit / Download Medical Form */}
+            <button
+              onClick={navigateSubmitDownload}
+              className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700"
+            >
+              Submit / Download Medical Form
+            </button>
+
             <button
               onClick={toggleMedicalHistories}
               className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700"
@@ -169,29 +185,19 @@ export default function PatientDashboard({ regnum: regnumProp }) {
                 ? "Hide Medical Histories"
                 : "View Medical Histories"}
             </button>
-            <button
-              onClick={navigateChangePassword}
-              className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700"
-            >
-              Change Password
-            </button>
-            <button
-              onClick={handleAppointmentClick}
-              className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700"
-            >
-              Add Appointment
-            </button>
-            <button
-              onClick={navigateMedicalForm}
-              className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700"
-            >
-              Submit / Download Medical Form
-            </button>
+
             <button
               onClick={goPatientForms}
               className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700"
             >
               Check Approval
+            </button>
+
+            <button
+              onClick={navigateChangePassword}
+              className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700"
+            >
+              Change Password
             </button>
           </div>
         )}
@@ -200,32 +206,32 @@ export default function PatientDashboard({ regnum: regnumProp }) {
         {showMedicalHistories && (
           <>
             {loadingHistories ? (
-              <p className="text-gray-600">Loading medical histories...</p>
+              <p>Loading medical histories...</p>
             ) : medicalHistories.length === 0 ? (
-              <p className="text-gray-600">No medical histories found.</p>
+              <p>No medical histories found.</p>
             ) : (
               <table className="min-w-full bg-white rounded-lg shadow-md overflow-hidden">
                 <thead>
                   <tr className="bg-teal-500 text-white">
-                    <th className="px-6 py-3 text-left text-sm">Blood Pressure</th>
-                    <th className="px-6 py-3 text-left text-sm">Blood Sugar</th>
-                    <th className="px-6 py-3 text-left text-sm">Weight</th>
-                    <th className="px-6 py-3 text-left text-sm">Temperature</th>
-                    <th className="px-6 py-3 text-left text-sm">Symptoms</th>
-                    <th className="px-6 py-3 text-left text-sm">Diagnosis</th>
-                    <th className="px-6 py-3 text-left text-sm">Visit Date</th>
+                    <th className="px-4 py-2">Blood Pressure</th>
+                    <th className="px-4 py-2">Blood Sugar</th>
+                    <th className="px-4 py-2">Weight</th>
+                    <th className="px-4 py-2">Temperature</th>
+                    <th className="px-4 py-2">Symptoms</th>
+                    <th className="px-4 py-2">Diagnosis</th>
+                    <th className="px-4 py-2">Visit Date</th>
                   </tr>
                 </thead>
                 <tbody>
                   {medicalHistories.map((h, idx) => (
                     <tr key={idx} className="border-b hover:bg-gray-50">
-                      <td className="px-6 py-4 text-sm">{h.bloodPressure}</td>
-                      <td className="px-6 py-4 text-sm">{h.bloodSugar}</td>
-                      <td className="px-6 py-4 text-sm">{h.weight}</td>
-                      <td className="px-6 py-4 text-sm">{h.temperature}</td>
-                      <td className="px-6 py-4 text-sm">{h.symptoms}</td>
-                      <td className="px-6 py-4 text-sm">{h.diagnosis}</td>
-                      <td className="px-6 py-4 text-sm">
+                      <td className="px-4 py-2">{h.bloodPressure}</td>
+                      <td className="px-4 py-2">{h.bloodSugar}</td>
+                      <td className="px-4 py-2">{h.weight}</td>
+                      <td className="px-4 py-2">{h.temperature}</td>
+                      <td className="px-4 py-2">{h.symptoms}</td>
+                      <td className="px-4 py-2">{h.diagnosis}</td>
+                      <td className="px-4 py-2">
                         {new Date(h.visitDate).toLocaleDateString()}
                       </td>
                     </tr>
