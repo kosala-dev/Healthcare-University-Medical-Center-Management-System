@@ -152,11 +152,7 @@ The backend runs at **http://localhost:5000**
 
 ## 📸 Screenshots
 
-| Dashboard | Appointment Page | Drug Inventory |
-|------------|-----------------|----------------|
-|<img width="959" height="421" alt="ss" src="https://github.com/user-attachments/assets/eb536438-94bd-463e-8c38-d458d8c51ed5" /> |
- |<img width="958" height="424" alt="ss1" src="https://github.com/user-attachments/assets/b98894ec-8977-4801-99a9-3e4c022c0d5c" /> |
- |<img width="959" height="422" alt="ss2" src="https://github.com/user-attachments/assets/7050b191-5605-47a7-8c03-152a0670e3c9" /> |
+DashboardAppointment PageDrug Inventory<img width="100%" alt="Dashboard" src="https://github.com/user-attachments/assets/eb536438-94bd-463e-8c38-d458d8c51ed5" /><img width="100%" alt="Appointment Page" src="https://github.com/user-attachments/assets/b98894ec-8977-4801-99a9-3e4c022c0d5c" /><img width="100%" alt="Drug Inventory" src="https://github.com/user-attachments/assets/7050b191-5605-47a7-8c03-152a0670e3c9" />
 
 ---
 
