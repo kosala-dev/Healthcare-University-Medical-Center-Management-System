@@ -22,11 +22,15 @@ Instead of relying on paper-based records, the Medical Center Management System 
 * Book or cancel **doctor appointments** * Get notifications for upcoming visits  
 
 ### 🩺 For Doctors
-* View assigned **appointments and patient details** * Update **diagnosis notes** and prescribed drugs  
+* View assigned **appointments and patient details**
+* Update **diagnosis notes** and prescribed drugs  
 * Access the **drug inventory system** in real time  
 
 ### 🔐 For Admins
-* Manage **users, appointments, and doctors** * Maintain **drug stock levels and usage reports** * Post **news, updates, and announcements** * Handle **role-based authentication** (Admin / Doctor / Student)
+* Manage **users, appointments, and doctors**
+* Maintain **drug stock levels and usage reports**
+* Post **news, updates, and announcements**
+* Handle **role-based authentication** (Admin / Doctor / Student)
 
 ---
 
@@ -89,8 +93,8 @@ cd backend
 npm install
 Create a .env file inside the backend folder:
 
-Code snippet
 
+Code snippet
 URL=http://localhost:5000
 SUPERADMIN_KEY=superadmin-key
 PATIENT_KEY=student-key
@@ -130,11 +134,12 @@ Note: The frontend will start at http://localhost:5173 and the backend runs at h
 │   └── package.json
 │
 └── README.md
+```
+
 🚀 Future Enhancements
+
 📈 Advanced analytics and reporting dashboards
-
 🌍 Multi-language support for better accessibility
-
 📱 Mobile App Version (React Native)
 
 🧑‍💻 Author
