@@ -139,11 +139,15 @@ Note: The frontend will start at http://localhost:5173 and the backend runs at h
 🚀 Future Enhancements
 
 📈 Advanced analytics and reporting dashboards
+
 🌍 Multi-language support for better accessibility
+
 📱 Mobile App Version (React Native)
 
 🧑‍💻 Author
-Kosala Madushan 📍 University of Vavuniya
+Kosala Madushan 📍
+University of Vavuniya
+
 
 🔗 GitHub Profile
 
