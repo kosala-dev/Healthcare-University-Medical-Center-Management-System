@@ -97,13 +97,13 @@ npm install
 Create a `.env` file inside the `backend` folder:
 
 ```env
-PORT=5000
-MONGO_URI=mongodb://127.0.0.1:27017/medicalcenter
-SUPERADMIN_KEY=superadmin-key
-ADMIN_KEY=admin-key
-PATIENT_KEY=student-key
-JWT_SECRET=your_jwt_secret
 URL=http://localhost:5000
+SUPERADMIN_KEY=superadmin-key
+PATIENT_KEY=student-key
+ADMIN_KEY=admin-key
+MONGO_URI=mongodb://127.0.0.1:27017/medicalcenter
+EMAIL_USER=medicalcenteruov@gmail.com
+EMAIL_PASS= add passkey
 ```
 
 Start the backend:
@@ -150,21 +150,22 @@ The backend runs at **http://localhost:5000**
 
 ---
 
-## 📸 Screenshots (Optional)
+## 📸 Screenshots
 
 | Dashboard | Appointment Page | Drug Inventory |
 |------------|-----------------|----------------|
-| *(Add screenshots later here)* | *(Add screenshots later here)* | *(Add screenshots later here)* |
+|<img width="959" height="421" alt="ss" src="https://github.com/user-attachments/assets/eb536438-94bd-463e-8c38-d458d8c51ed5" />
+ |<img width="958" height="424" alt="ss1" src="https://github.com/user-attachments/assets/b98894ec-8977-4801-99a9-3e4c022c0d5c" />
+ |<img width="959" height="422" alt="ss2" src="https://github.com/user-attachments/assets/7050b191-5605-47a7-8c03-152a0670e3c9" />
+ |
 
 ---
 
 ## 🚀 Future Enhancements
 
-- 📱 Mobile responsive UI for doctors & patients  
-- 🔔 Push notifications for appointments  
 - 📈 Advanced analytics and reporting  
 - 🌍 Multi-language support  
-- 🧾 PDF generation for medical reports  
+- 🧾 Mobile App Version
 
 ---
 
@@ -178,7 +179,7 @@ The backend runs at **http://localhost:5000**
 
 ## 🪪 License
 
-This project is released under the **MIT License**.  
-You are free to modify and distribute it with attribution.
+This project is released under the **Private License**.  
+You are not allowed to modify and distribute it with attribution.
 
 ---
