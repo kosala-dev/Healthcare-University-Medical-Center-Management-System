@@ -1,0 +1,29 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+* {
+  font-family: "", sans-serif;
+}
+
+#statusup {
+  background-color: #76dbcf;
+  outline: none;
+}
+
+#pdf-content, #pdf-content * {
+  letter-spacing: 0 !important;
+  word-spacing: 0 !important;
+  white-space: normal !important;
+  text-rendering: geometricPrecision !important;
+  -webkit-font-smoothing: antialiased !important;
+  font-family: Arial, Helvetica, sans-serif !important;
+}
+
+input, textarea {
+  background-color: white !important;
+}
+
+.avoid-page-break {
+  page-break-inside: avoid !important;
+  break-inside: avoid !important;
+}
