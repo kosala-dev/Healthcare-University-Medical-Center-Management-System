@@ -200,7 +200,7 @@ export default function PatientDashboard({ regnum }) {
           </button>
         </div>
 
-        {/* medical history Table */}
+        {/* medical history table */}
         {showMedicalHistories && (
           <div className="mt-6 overflow-x-auto">
             {loading ? (
@@ -234,7 +234,7 @@ export default function PatientDashboard({ regnum }) {
                           onClick={() =>
                             handleDownloadPrescription(
                               history.regNo,
-                              history.bloodPressure, // Corrected order
+                              history.bloodPressure, 
                               history.weight,
                               history.temperature,
                               history.diagnosis,
@@ -257,4 +257,5 @@ export default function PatientDashboard({ regnum }) {
       </div>
     </div>
   );
+
 }
