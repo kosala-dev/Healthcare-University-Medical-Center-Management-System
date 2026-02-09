@@ -59,7 +59,7 @@ const NewsSection = () => {
         <div className="mt-6 flex flex-col sm:flex-row justify-center gap-4">
           <button
             onClick={() => navigate("/message")}
-            className="bg-[#670047] text-white px-6 py-3 rounded-xl shadow hover:bg-[#670050] transition-colors"
+            className="bg-blue-600 text-white px-6 py-3 rounded-xl shadow hover:bg-blue-700 transition-colors"
           >
             Send a Message
           </button>
@@ -98,7 +98,7 @@ const NewsSection = () => {
                 navigate("/login", { state: { from: "/submit-medical" } });
               }
             }}
-            className="bg-[#670047] text-white px-6 py-3 rounded-xl shadow hover:bg-[#670050] transition-colors"
+            className="bg-blue-600 text-white px-6 py-3 rounded-xl shadow hover:bg-blue-700 transition-colors"
           >
             Submit Medical Form
           </button>
