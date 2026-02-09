@@ -4,12 +4,22 @@ const medicalHistorySchema = new mongoose.Schema(
   {
     regNo: { type: String, required: true },
     bloodPressure: { type: String, required: true },
+    height: { type: String }, 
     weight: { type: String, required: true },
     temperature: { type: String, required: true },
     diagnosis: { type: String, required: true },
     prescription: { type: String, required: true },
     visitDate: { type: Date, required: true },
+    bmi: { type: String },
+    bmiCategory: { type: String }, 
+    drugs: [
+      {
+        drugId: { type: mongoose.Schema.Types.ObjectId, ref: "Drug" },
+        quantity: { type: Number, required: true },
+      },
+    ],
     status: { type: String, default: "Pending" }, 
+    
   },
   {
     timestamps: true,
