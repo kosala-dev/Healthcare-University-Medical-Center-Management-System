@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useNavigate, useLocation } from "react-router-dom"; 
+import { useNavigate, useLocation } from "react-router-dom";
 
 export default function MedicalHistoryForm() {
   const [formData, setFormData] = useState({
     regNo: "",
     bloodPressure: "",
+    height: "",
     weight: "",
+    bmi: "",
+    bmiCategory: "",
     temperature: "",
     diagnosis: "",
     prescription: "",
@@ -14,16 +17,14 @@ export default function MedicalHistoryForm() {
   });
 
   const [drugsList, setDrugsList] = useState([]);
-  
-  const [selectedDrugs, setSelectedDrugs] = useState([]); 
-  
+  const [selectedDrugs, setSelectedDrugs] = useState([]);
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
 
   const navigate = useNavigate();
-  const location = useLocation(); 
+  const location = useLocation();
 
-  // Fetch Drugs on Load
+  // fetch Drugs
   useEffect(() => {
     const fetchDrugs = async () => {
       try {
@@ -38,36 +39,57 @@ export default function MedicalHistoryForm() {
 
   // fill reg no
   useEffect(() => {
-    if (location.state && location.state.preFilledRegNo) {
+    if (location.state?.preFilledRegNo) {
       setFormData((prev) => ({
         ...prev,
-        regNo: location.state.preFilledRegNo, 
+        regNo: location.state.preFilledRegNo,
       }));
     }
   }, [location.state]);
 
   const uniqueDrugNames = [...new Set(drugsList.map((d) => d.name))];
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+
+    let updatedData = {
+      ...formData,
+      [name]: value,
+    };
+
+    if (name === "height" || name === "weight") {
+      const height = name === "height" ? value : formData.height;
+      const weight = name === "weight" ? value : formData.weight;
+
+      if (height && weight) {
+        const h = height / 100;
+        const bmi = (weight / (h * h)).toFixed(2);
+
+        let category = "";
+        if (bmi < 18.5) category = "Underweight";
+        else if (bmi < 25) category = "Normal";
+        else if (bmi < 30) category = "Overweight";
+        else category = "Obese";
+
+        updatedData.bmi = bmi;
+        updatedData.bmiCategory = category;
+      } else {
+        updatedData.bmi = "";
+        updatedData.bmiCategory = "";
+      }
+    }
+
+    setFormData(updatedData);
   };
 
-  // Handle Drug Name dropdown
-  const handleNameSelect = (index, nameValue) => {
+  const handleNameSelect = (index, value) => {
     setSelectedDrugs((prev) => {
       const updated = [...prev];
-      updated[index] = {
-        ...updated[index],
-        tempName: nameValue, 
-        drugId: "",          
-        quantity: 0          
-      };
+      updated[index] = { tempName: value, drugId: "", quantity: 0 };
       return updated;
     });
   };
 
-  // Handle drug dropname
   const handleDrugDetailSelect = (index, field, value) => {
     setSelectedDrugs((prev) => {
       const updated = [...prev];
@@ -87,44 +109,52 @@ export default function MedicalHistoryForm() {
     setSelectedDrugs((prev) => prev.filter((_, i) => i !== index));
   };
 
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
-  const validDrugs = selectedDrugs.filter((d) => d.drugId && d.quantity > 0);
-    
-  if (validDrugs.length === 0) {
-    setErrorMessage("Please select at least one drug with dosage and quantity.");
-    return;
-  }
 
+    const validDrugs = selectedDrugs.filter(
+      (d) => d.drugId && d.quantity > 0
+    );
 
-    const generatedPrescription = validDrugs.map(d => {
-        const drugInfo = drugsList.find(item => item._id === d.drugId);
-        return drugInfo 
-          ? `${drugInfo.name} ${drugInfo.dosage} (Qty: ${d.quantity})` 
+    if (validDrugs.length === 0) {
+      setErrorMessage("Please select at least one drug with quantity.");
+      return;
+    }
+
+    const generatedPrescription = validDrugs
+      .map((d) => {
+        const drug = drugsList.find((item) => item._id === d.drugId);
+        return drug
+          ? `${drug.name} ${drug.dosage} (Qty: ${d.quantity})`
           : "";
-    }).filter(Boolean).join(", ");
+      })
+      .filter(Boolean)
+      .join(", ");
 
     try {
       const token = localStorage.getItem("token");
-      
-      const response = await axios.post(
+
+      const res = await axios.post(
         "http://localhost:8080/medicalhis/medical-history",
-        { 
-            ...formData, 
-            prescription: generatedPrescription, 
-            drugs: validDrugs 
+        {
+          ...formData,
+          prescription: generatedPrescription,
+          drugs: validDrugs,
         },
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
-      if (response.status === 201) {
+      if (res.status === 201) {
         setSuccessMessage("Medical history added successfully!");
         setErrorMessage("");
         setFormData({
           regNo: "",
           bloodPressure: "",
+          height: "",
           weight: "",
+          bmi: "",
+          bmiCategory: "",
           temperature: "",
           diagnosis: "",
           prescription: "",
@@ -132,186 +162,217 @@ export default function MedicalHistoryForm() {
         });
         setSelectedDrugs([]);
       }
-    } catch (error) {
+    } catch (err) {
       setErrorMessage(
-        error.response?.data?.message || "Failed to add medical history."
+        err.response?.data?.message || "Failed to add medical history."
       );
       setSuccessMessage("");
-      console.error(error);
     }
   };
 
-  const inputFields = [
-    { key: "regNo", label: "Registration Number" },
-    { key: "bloodPressure", label: "Blood Pressure" },
-    { key: "weight", label: "Weight (kg)" },
-    { key: "temperature", label: "Temperature (ºC)" },
-    { key: "diagnosis", label: "Diagnosis" },
-  ];
-
-  return (
-    <div className="min-h-screen flex flex-col md:flex-row bg-gradient-to-r from-blue-50 to-purple-50">
-      
-      <div className="w-full md:w-1/4 bg-gradient-to-r from-[#4A0033] via-[#670047] to-[#9A006C] p-6 md:p-8 flex flex-col justify-between">
-        <div>
-          <h1 className="text-xl md:text-2xl font-bold text-white">
-            Medical Center University of Vavuniya
-          </h1>
-          <p className="text-sm md:text-base text-white mt-2">
-            Secure and Reliable Healthcare Services
-          </p>
-        </div>
-        <div className="mt-4 md:mt-0">
-          <button
-            onClick={() => navigate("/admindashboard")}
-            className="w-full bg-white text-[#670047] py-2 px-4 rounded-lg hover:bg-gray-100 font-bold"
-          >
-            Back to Dashboard
-          </button>
-        </div>
-      </div>
-
-      <div className="w-full md:w-3/4 p-4 md:p-8">
-        <h1 className="text-xl md:text-2xl font-bold text-gray-800 mb-4">
-          Add Prescription/Diagnosis
+return (
+  <div className="min-h-screen flex flex-col md:flex-row bg-gradient-to-r from-blue-50 to-purple-50">
+    <div className="w-full md:w-1/4 bg-gradient-to-r from-[#4A0033] via-[#670047] to-[#9A006C] p-6 md:p-8 flex flex-col justify-between">
+      <div>
+        <h1 className="text-xl md:text-2xl font-bold text-white">
+          Medical Center University of Vavuniya
         </h1>
-        <div className="bg-white p-4 md:p-6 rounded-lg shadow-md">
-          {successMessage && (
-            <div className="mb-4 text-green-600 text-center text-base md:text-lg bg-green-50 p-2 rounded border border-green-200">
-              {successMessage}
-            </div>
-          )}
-          {errorMessage && (
-            <div className="mb-4 text-red-500 text-center text-base md:text-lg bg-red-50 p-2 rounded border border-red-200">
-              {errorMessage}
-            </div>
-          )}
-
-          <form onSubmit={handleSubmit} className="space-y-4 md:space-y-6">
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {inputFields.map((field) => (
-                <div key={field.key} className="flex flex-col">
-                  <label className="text-gray-700 mb-1 md:mb-2 font-medium">
-                    {field.label}
-                  </label>
-                  <input
-                    type="text"
-                    name={field.key}
-                    value={formData[field.key]}
-                    onChange={handleChange}
-                    className="w-full p-2 md:p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#670047]"
-                    required
-                  />
-                </div>
-              ))}
-
-              <div className="flex flex-col">
-                <label className="text-gray-700 mb-1 md:mb-2 font-medium">Visit Date</label>
-                <input
-                  type="date"
-                  name="visitDate"
-                  value={formData.visitDate}
-                  onChange={handleChange}
-                  className="w-full p-2 md:p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#670047]"
-                  required
-                />
-              </div>
-            </div>
-
-            <div className="p-4 bg-gray-50 rounded-lg border border-gray-200">
-              <label className="block text-gray-800 mb-3 font-bold text-lg">
-                Prescribe Medicine
-              </label>
-              
-              <div className="flex flex-col space-y-3">
-                {selectedDrugs.map((row, index) => {
-                   const availableDosages = drugsList.filter(d => d.name === row.tempName);
-
-                   return (
-                    <div
-                      key={index}
-                      className="flex flex-col md:flex-row md:items-center gap-3 p-3 bg-white rounded shadow-sm"
-                    >
-                      <div className="flex-1">
-                        <label className="block text-xs text-gray-500 mb-1">Drug Name</label>
-                        <select
-                          className="w-full p-2 border border-gray-300 rounded focus:ring-[#670047] focus:border-[#670047]"
-                          value={row.tempName || ""}
-                          onChange={(e) => handleNameSelect(index, e.target.value)}
-                          required
-                        >
-                          <option value="">-- Select Name --</option>
-                          {uniqueDrugNames.map((name) => (
-                            <option key={name} value={name}>{name}</option>
-                          ))}
-                        </select>
-                      </div>
-
-                      <div className="flex-1">
-                        <label className="block text-xs text-gray-500 mb-1">Dosage</label>
-                        <select
-                          className="w-full p-2 border border-gray-300 rounded focus:ring-[#670047] focus:border-[#670047]"
-                          value={row.drugId || ""}
-                          onChange={(e) => handleDrugDetailSelect(index, "drugId", e.target.value)}
-                          disabled={!row.tempName}
-                          required
-                        >
-                          <option value="">-- Select Dosage --</option>
-                          {availableDosages.map((drug) => (
-                            <option key={drug._id} value={drug._id}>
-                              {drug.dosage} (Stock: {drug.quantity})
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-
-                      <div className="w-full md:w-24">
-                        <label className="block text-xs text-gray-500 mb-1">Qty</label>
-                        <input
-                          type="number"
-                          min="1"
-                          placeholder="0"
-                          value={row.quantity || ""}
-                          onChange={(e) => handleDrugDetailSelect(index, "quantity", e.target.value)}
-                          className="w-full p-2 border border-gray-300 rounded focus:ring-[#670047] focus:border-[#670047]"
-                          required
-                        />
-                      </div>
-
-                      <div className="flex items-end pb-1">
-                         <button
-                          type="button"
-                          onClick={() => removeDrugRow(index)}
-                          className="text-red-500 hover:text-red-700 font-semibold text-sm px-2"
-                        >
-                          ✕ Remove
-                        </button>
-                      </div>
-                    </div>
-                   );
-                })}
-              </div>
-
-              <button
-                type="button"
-                onClick={addDrugRow}
-                className="mt-4 text-[#670047] border border-[#670047] px-4 py-2 rounded hover:bg-[#670047] hover:text-white transition text-sm font-semibold"
-              >
-                + Add Another Drug
-              </button>
-            </div>
-
-            <button
-              type="submit"
-              className="w-full mt-6 bg-[#670047] text-white p-3.5 rounded-lg hover:bg-[#500036] font-bold text-lg shadow-lg transition transform hover:scale-[1.01]"
-            >
-              Save Medical History
-            </button>
-
-          </form>
-        </div>
+        <p className="text-white mt-2 text-sm opacity-90">
+          Secure Healthcare Services
+        </p>
       </div>
+
+      <button
+        onClick={() => navigate("/admindashboard")}
+        className="bg-white text-[#670047] py-2 rounded-lg font-semibold"
+      >
+        Back to Dashboard
+      </button>
     </div>
-  );
+
+    <div className="w-full md:w-3/4 p-6">
+      <h2 className="text-2xl font-semibold mb-6">
+        Add Prescription / Diagnosis
+      </h2>
+
+      {successMessage && (
+        <p className="text-green-600 mb-4">{successMessage}</p>
+      )}
+      {errorMessage && (
+        <p className="text-red-500 mb-4">{errorMessage}</p>
+      )}
+
+      <form onSubmit={handleSubmit} className="space-y-5">
+        <div>
+          <label className="block text-sm font-medium mb-1">Registration No</label>
+          <input
+            name="regNo"
+            value={formData.regNo}
+            onChange={handleChange}
+            className="w-full p-2 border rounded"
+            required
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium mb-1">Blood Pressure</label>
+          <input
+            name="bloodPressure"
+            value={formData.bloodPressure}
+            onChange={handleChange}
+            className="w-full p-2 border rounded"
+          />
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label className="block text-sm font-medium mb-1">Height (cm)</label>
+            <input
+              type="number"
+              name="height"
+              value={formData.height}
+              onChange={handleChange}
+              className="w-full p-2 border rounded"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium mb-1">Weight (kg)</label>
+            <input
+              type="number"
+              name="weight"
+              value={formData.weight}
+              onChange={handleChange}
+              className="w-full p-2 border rounded"
+            />
+          </div>
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium mb-1">BMI</label>
+          <input
+            value={formData.bmi}
+            readOnly
+            className="w-full p-2 border rounded bg-gray-100"
+          />
+          {formData.bmiCategory && (
+            <p className="text-sm mt-1 text-gray-600">
+              Category: <span className="font-semibold">{formData.bmiCategory}</span>
+            </p>
+          )}
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium mb-1">Temperature (°C)</label>
+          <input
+            type="number"
+            name="temperature"
+            value={formData.temperature}
+            onChange={handleChange}
+            className="w-full p-2 border rounded"
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium mb-1">Diagnosis</label>
+          <textarea
+            name="diagnosis"
+            value={formData.diagnosis}
+            onChange={handleChange}
+            rows="3"
+            className="w-full p-2 border rounded"
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium mb-1">Visit Date</label>
+          <input
+            type="date"
+            name="visitDate"
+            value={formData.visitDate}
+            onChange={handleChange}
+            className="w-full p-2 border rounded"
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium mb-2">Prescribed Drugs</label>
+
+          <button
+            type="button"
+            onClick={addDrugRow}
+            className="mb-3 px-4 py-2 border rounded hover:bg-gray-100"
+          >
+            + Add Drug
+          </button>
+
+          {selectedDrugs.map((row, index) => {
+            const available = drugsList.filter(
+              (d) => d.name === row.tempName
+            );
+
+            return (
+              <div key={index} className="flex gap-2 mb-2">
+                <select
+                  className="p-2 border rounded w-1/3"
+                  onChange={(e) =>
+                    handleNameSelect(index, e.target.value)
+                  }
+                >
+                  <option value="">Drug</option>
+                  {uniqueDrugNames.map((n) => (
+                    <option key={n}>{n}</option>
+                  ))}
+                </select>
+
+                <select
+                  className="p-2 border rounded w-1/3"
+                  onChange={(e) =>
+                    handleDrugDetailSelect(index, "drugId", e.target.value)
+                  }
+                >
+                  <option value="">Dosage</option>
+                  {available.map((d) => (
+                    <option key={d._id} value={d._id}>
+                      {d.dosage}
+                    </option>
+                  ))}
+                </select>
+
+                <input
+                  type="number"
+                  min="1"
+                  className="p-2 border rounded w-1/6"
+                  placeholder="Qty"
+                  onChange={(e) =>
+                    handleDrugDetailSelect(
+                      index,
+                      "quantity",
+                      e.target.value
+                    )
+                  }
+                />
+
+                <button
+                  type="button"
+                  onClick={() => removeDrugRow(index)}
+                  className="text-red-500 font-semibold"
+                >
+                  ✕
+                </button>
+              </div>
+            );
+          })}
+        </div>
+
+        <button
+          type="submit"
+          className="bg-[#670047] text-white px-6 py-3 rounded font-semibold hover:opacity-90"
+        >
+          Save Medical History
+        </button>
+      </form>
+    </div>
+  </div>
+);
 }
