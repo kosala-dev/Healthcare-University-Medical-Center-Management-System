@@ -2,42 +2,8 @@ const express = require("express");
 const router = express.Router();
 const MedicalHistoryModel = require("../models/Medicalhistory");
 const PatientModel = require("../models/patient");
-
-router.post("/medical-history", async (req, res) => {
-  const {
-    regNo,
-    bloodPressure,
-    weight,
-    temperature,
-    diagnosis,
-    prescription,
-    visitDate,
-  } = req.body;
-
-  try {
-    const patient = await PatientModel.findOne({ regnum: regNo });
-    if (!patient) {
-      return res.status(404).json({ message: "Patient not found" });
-    }
-
-    const medicalHistory = new MedicalHistoryModel({
-      regNo,
-      bloodPressure,
-      weight,
-      temperature,
-      diagnosis,
-      prescription,
-      visitDate,
-    });
-
-    await medicalHistory.save();
-
-    res.status(201).json({ message: "Medical history added successfully" });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Failed to add medical history" });
-  }
-});
+const Drug = require("../models/drug");
+const Notification = require("../models/Notification");
 
 router.get("/medical-history-get", async (req, res) => {
   try {
@@ -71,11 +37,15 @@ router.post("/medical-history", async (req, res) => {
     const {
       regNo,
       bloodPressure,
+      height,
       weight,
       temperature,
       diagnosis,
       prescription,
       visitDate,
+      bmi,
+      bmiCategory,
+      drugs,
     } = req.body;
 
     if (
@@ -87,29 +57,75 @@ router.post("/medical-history", async (req, res) => {
       !prescription ||
       !visitDate
     ) {
-      return res.status(400).json({ message: "All fields are required" });
+      return res.status(400).json({
+        message: "All required fields must be filled",
+      });
     }
 
-    const patient = await PatientModel.findOne({ regNo });
+    const patient = await PatientModel.findOne({ regnum: regNo });
     if (!patient) {
       return res.status(404).json({ message: "Patient not found" });
+    }
+
+    if (!drugs || drugs.length === 0) {
+      return res.status(400).json({
+        message: "At least one drug must be selected",
+      });
+    }
+
+    for (let d of drugs) {
+      const drug = await Drug.findById(d.drugId);
+
+      if (!drug) {
+        return res.status(404).json({
+          message: `Drug not found: ${d.drugId}`,
+        });
+      }
+
+      if (drug.quantity < d.quantity) {
+        return res.status(400).json({
+          message: `Not enough stock for ${drug.name}. Available: ${drug.quantity}`,
+        });
+      }
+
+      drug.quantity -= d.quantity;
+      await drug.save();
+
+      if (drug.quantity < 100) {
+        await Notification.create({
+          message: `Low stock alert: ${drug.name} has only ${drug.quantity} items left.`,
+          type: "low_stock",
+          date: new Date(),
+        });
+      }
     }
 
     const medicalHistory = new MedicalHistoryModel({
       regNo,
       bloodPressure,
+      height, 
       weight,
       temperature,
       diagnosis,
       prescription,
       visitDate,
+      bmi,
+      bmiCategory,
+      drugs,
+      status: "Pending",
     });
+
     await medicalHistory.save();
 
-    res.status(201).json({ message: "Medical history added successfully" });
+    res.status(201).json({
+      message: "Medical history added successfully",
+      medicalHistory,
+    });
   } catch (error) {
     console.error("Error adding medical history:", error);
-    res.status(500).json({ message: "Failed to add medical history" });
+    res.status(500).json({
+      message: "Failed to add medical history",
+    });
   }
 });
 
