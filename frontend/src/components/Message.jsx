@@ -59,7 +59,7 @@ export default function Message() {
 
     <div className="min-h-screen flex flex-col items-center py-10 px-4 sm:px-8 lg:px-20">
 
-      <h1 className="text-3xl sm:text-4xl font-bold text-blue-700 mb-8 text-center">
+      <h1 className="text-3xl sm:text-4xl font-bold text-black-700 mb-8 text-center">
         Message Center
       </h1>
 
@@ -166,7 +166,7 @@ export default function Message() {
           <div className="w-full flex justify-center">
             <button
               type="submit"
-              className="bg-blue-600 text-white font-semibold py-2 px-10 rounded-lg hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 transition-all"
+              className="bg-[#670047] text-white font-semibold py-2 px-10 rounded-lg hover:bg-[#670050] focus:ring-2 focus:ring-blue-500 transition-all"
             >
               Send Message
             </button>

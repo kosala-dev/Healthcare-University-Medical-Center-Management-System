@@ -82,7 +82,7 @@ const Help = () => {
             <div className="mt-8 flex flex-col sm:flex-row items-center gap-4">
               <button
                 onClick={() => setExpanded(!expanded)}
-                className="px-6 py-3 bg-gradient-to-r from-cyan-600 to-blue-600 text-white font-medium rounded-lg shadow-md hover:from-cyan-700 hover:to-blue-700 transition-all transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-opacity-50 flex items-center gap-2"
+                className="px-6 py-3 bg-[#670047] text-white font-medium rounded-lg shadow-md hoverbg-[#670050] transition-all transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-black-500 focus:ring-opacity-50 flex items-center gap-2"
               >
                 {expanded ? "Show Less" : "Read More"}
               </button>

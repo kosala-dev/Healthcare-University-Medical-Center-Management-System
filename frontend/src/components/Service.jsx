@@ -133,7 +133,7 @@ const ServicesSection = () => {
           </h3>
           <button
             onClick={() => navigate("/message")}
-            className="px-8 py-4 bg-gradient-to-r from-indigo-600 to-blue-600 text-white font-bold rounded-full shadow-lg hover:shadow-xl transition-all hover:scale-105"
+            className="px-8 py-4 bg-[#670047]  text-white font-bold rounded-full shadow-lg hover:shadow-xl transition-all hover:scale-105"
           >
             Contact Our Support Team
           </button>

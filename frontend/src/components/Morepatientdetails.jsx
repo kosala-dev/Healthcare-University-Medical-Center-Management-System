@@ -128,7 +128,7 @@ export default function MorePatientDetails() {
           <div className="w-full max-w-6xl mt-8">
             <button
               onClick={toggleMedicalHistories}
-              className="bg-teal-600 text-white px-6 py-2 rounded-lg hover:bg-teal-700 transition-all mb-4"
+              className="bg-[#670047] text-white px-6 py-2 rounded-lg hover:bg-[#670050] transition-all mb-4"
             >
               {showMedicalHistories ? "Hide Medical Histories" : "View Medical Histories"}
             </button>

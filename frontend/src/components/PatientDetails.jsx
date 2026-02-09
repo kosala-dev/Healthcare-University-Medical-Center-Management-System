@@ -112,7 +112,7 @@ export default function PatientDetails() {
 
         {/* number of patients */}
         <div className="flex justify-center items-center">
-          <h1 className="text-blue-600 text-2xl sm:text-3xl font-semibold">
+          <h1 className="text-black-600 text-2xl sm:text-3xl font-semibold">
             Total Patients:{" "}
             <span className="text-gray-800">{patientCount}</span>
           </h1>
@@ -136,7 +136,7 @@ export default function PatientDetails() {
               <th className="px-4 py-2 text-white font-semibold text-center">
                 Gender
               </th>
-              <th className="px-4 py-2 text-white font-semibold text-center">
+              <th className="px-4 py-2 text-white font-semibold text-center ">
                 Actions
               </th>
             </tr>
@@ -162,7 +162,7 @@ export default function PatientDetails() {
                   </td>
                   <td className="border border-gray-300 px-4 py-2 flex gap-2 justify-center items-center">
                     <button
-                      className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-all"
+                      className="px-4 py-2 bg-[#670047]  text-white rounded-md hover:bg-[#670050]  transition-all"
                       onClick={() => goMorePatientdetails(item)}
                     >
                       More
