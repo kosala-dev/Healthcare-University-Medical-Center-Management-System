@@ -1,0 +1,93 @@
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import api from "../api/axios";
+
+const NewsSection = () => {
+  const navigate = useNavigate();
+
+  const images = [
+    "/images/medical1.png",
+    "/images/medical2.png",
+    "/images/medical3.png",
+  ];
+
+  const [current, setCurrent] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrent((prev) => (prev + 1) % images.length);
+    }, 3000);
+    return () => clearInterval(timer);
+  }, [images.length]);
+
+  return (
+    <section className="bg-gray-50 py-12 px-4 sm:px-6 md:px-12 lg:px-20">
+      <div className="max-w-6xl mx-auto text-center">
+
+        <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-800 mb-8">
+          Latest News & Announcements
+        </h2>
+
+        <div className="relative w-full max-w-3xl h-[250px] sm:h-[350px] md:h-[450px] mx-auto overflow-hidden rounded-2xl mb-5 flex justify-center items-center bg-gray-100">
+
+          <div
+            className="flex transition-transform duration-700 ease-in-out"
+            style={{ transform: `translateX(-${current * 100}%)` }}
+          >
+            {images.map((img, index) => (
+              <img
+                key={index}
+                src={img}
+                alt={`Slide ${index + 1}`}
+                className="object-contain flex-shrink-0 w-full h-full"
+              />
+            ))}
+          </div>
+        </div>
+
+        <div className="flex justify-center gap-2 mb-8">
+          {images.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => setCurrent(index)}
+              className={`w-3 h-3 rounded-full ${
+                index === current ? "bg-blue-600" : "bg-gray-300"
+              }`}
+            ></button>
+          ))}
+        </div>
+
+        <div className="mt-6 flex flex-col sm:flex-row justify-center gap-4">
+          <button
+            onClick={() => navigate("/message")}
+            className="bg-[#670047] text-white px-6 py-3 rounded-xl shadow transition-colors"
+          >
+            Send a Message
+          </button>
+
+          <button
+            onClick={async () => {
+              try {
+                const { data } = await api.get("/auth/verify/patient");
+                if (data.login) {
+                  navigate("/submit-medical");
+                } else {
+                  navigate("/login", { state: { from: "/submit-medical" } });
+                }
+              } catch (err) {
+                console.error("Verification error:", err);
+                navigate("/login", { state: { from: "/submit-medical" } });
+              }
+            }}
+            className="bg-[#670047] text-white px-6 py-3 rounded-xl shadow transition-colors"
+          >
+            Submit Medical Form
+          </button>
+        </div>
+
+      </div>
+    </section>
+  );
+};
+
+export default NewsSection;
