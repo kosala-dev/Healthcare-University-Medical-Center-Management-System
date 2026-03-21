@@ -75,7 +75,7 @@ export default function Home({ role, userId }) {
         
         <img
           className="w-full sm:w-1/2 h-[200px] sm:h-[300px] object-cover rounded-lg shadow-lg"
-          src="/src/assets/images/home.png"
+          src="/images/home.png"
           alt="Healthcare"
         />
 
