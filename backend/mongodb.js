@@ -4,7 +4,9 @@ dotenv.config();
 
 const connection = async () => {
   try {
-    mongoose.connect(process.env.MONGO_URI);
+    mongoose.connect(process.env.MONGO_URI, {
+      dbName: "UniversityOfVavuniyaHealthcareSystem"
+    });
     console.log("Database connected");
   } catch (err) {
     console.log("Error" + err);
