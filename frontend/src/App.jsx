@@ -53,21 +53,21 @@ function App() {
     // Function to verify user roles and credentials
     const verifyUser = async () => {
       try {
-        let response = await axios.get("http://localhost:8080/auth/verify");
+        let response = await axios.get("http://localhost:8080/auth/verify/superadmin");
         if (response.data.login) {
           setRole(response.data.role);
           setUserName(response.data.username);
           return;
         }
 
-        response = await axios.get("http://localhost:8080/auth/verifypatient");
+        response = await axios.get("http://localhost:8080/auth/verify/patient");
         if (response.data.login) {
           setRole(response.data.role);
           setUserName(response.data.username);
           return;
         }
 
-        response = await axios.get("http://localhost:8080/auth/verifyadmin");
+        response = await axios.get("http://localhost:8080/auth/verify/admin");
         if (response.data.login) {
           setRole(response.data.role);
           setUserName(response.data.username);
@@ -88,7 +88,6 @@ function App() {
 
   return (
     <>
-      <Router>
         <Routes>
           <Route
             path="/"
@@ -216,7 +215,6 @@ function App() {
         <Route path="/diagnosisdetails" element={<Diagnosisdetails />} />
         <Route path="/monthly-drug-report" element={<MonthlyDrugReport />}/>
         </Routes>
-      </Router>
     </>
   );
 }
