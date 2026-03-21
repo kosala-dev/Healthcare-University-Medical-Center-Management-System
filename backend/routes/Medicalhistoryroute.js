@@ -5,7 +5,7 @@ const mongoose = require("mongoose");
 const MedicalHistoryModel = require("../models/Medicalhistory");
 const PatientModel = require("../models/patient");
 const Drug = require("../models/drug");
-const Notification = require("../models/Notification");
+const Notification = require("../models/notification");
 
 router.post("/medical-history", async (req, res) => {
   try {
