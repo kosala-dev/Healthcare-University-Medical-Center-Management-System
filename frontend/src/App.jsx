@@ -42,7 +42,7 @@ import MedicalFormsPatient from "./components/MedicalFormsPatient";
 import Diagnosisdetails from "./components/Diagnosisdetails";
 import MonthlyDrugReport from "./components/MonthlyDrugReport";
 
-const BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:8080";
+const apiUrl = process.env.REACT_APP_API_URL;
 
 function App() {
   const [role, setRole] = useState("");
@@ -53,27 +53,26 @@ function App() {
     // Function to verify user roles and credentials
     const verifyUser = async () => {
       try {
-        let response = await axios.get(`${BASE_URL}/auth/verify/superadmin`);
+        let response = await axios.get(`${apiUrl}/auth/verify/superadmin`);
         if (response.data.login) {
           setRole(response.data.role);
           setUserName(response.data.username);
           return;
         }
 
-        response = await axios.get(`${BASE_URL}/auth/verify/patient`);
+        response = await axios.get(`${apiUrl}/auth/verify/patient`);
         if (response.data.login) {
           setRole(response.data.role);
           setUserName(response.data.username);
           return;
         }
 
-        response = await axios.get(`${BASE_URL}/auth/verify/admin`);
+        response = await axios.get(`${apiUrl}/auth/verify/admin`);
         if (response.data.login) {
           setRole(response.data.role);
           setUserName(response.data.username);
           return;
         }
-
         setRole("");
         setUserName(null);
       } catch (error) {
