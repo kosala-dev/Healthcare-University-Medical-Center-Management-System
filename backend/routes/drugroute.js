@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Drug = require("../models/drug");
-const Notification = require("../models/Notification");
+const Notification = require("../models/notification");
 
 async function checkLowStock(drug) {
   if (drug.quantity < 100) {
