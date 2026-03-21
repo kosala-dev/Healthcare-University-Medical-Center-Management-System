@@ -1,34 +1,40 @@
-const express = require("express");
-const dotenv = require("dotenv");
-dotenv.config(); 
+import express from "express";
+import dotenv from "dotenv";
+dotenv.config();
 
 import("./mongodb.js"); 
-const cors = require("cors");
-const cookieParser = require("cookie-parser"); 
+import cors from "cors";
+import cookieParser from "cookie-parser";
 
-const Authroute = require("./routes/authroute.js");
-const Patientroute = require("./routes/patientroute.js");
-const Messageroute = require("./routes/msgroute.js");
-const appointmentroute = require("./routes/appointmentroute.js");
-const MedicalHistory = require("./routes/Medicalhistoryroute.js");
-const DrugRoutes = require("./routes/drugroute.js");
-const appointmentRoutes = require("./routes/appointmentroute.js");
-const medicalFormRoute = require("./routes/medicalformroute.js"); 
-const notificationRoute = require("./routes/notificationRoute.js");
-
-const seed = require("./seed.js");
+import Authroute from "./routes/authroute.js";
+import Patientroute from "./routes/patientroute.js";
+import Messageroute from "./routes/msgroute.js";
+import appointmentroute from "./routes/appointmentroute.js";
+import MedicalHistory from "./routes/Medicalhistoryroute.js";
+import DrugRoutes from "./routes/drugroute.js";
+import appointmentRoutes from "./routes/appointmentroute.js";
+import medicalFormRoute from "./routes/medicalformroute.js"; 
+import notificationRoute from "./routes/notificationRoute.js";
 
 const app = express();
 
-app.use(express.json());
+// Allow localhost for dev, deployed URL for production
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://uov-healthcaresystemproject.onrender.com"
+];
+
 app.use(
   cors({
-    origin: ["http://localhost:5173"],
+    origin: allowedOrigins,
     credentials: true,
   })
 );
-app.use(cookieParser());
 
+app.use(cookieParser());
+app.use(express.json());
+
+// Routes
 app.use("/auth", Authroute);
 app.use("/patient", Patientroute);
 app.use("/message", Messageroute);
@@ -39,7 +45,8 @@ app.use("/appointments", appointmentRoutes);
 app.use("/api", medicalFormRoute);
 app.use("/notifications", notificationRoute);
 
+// Listen on Render's port
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
-  console.log("Server is running on port ", PORT);
+  console.log(`Server running on port ${PORT}`);
 });
