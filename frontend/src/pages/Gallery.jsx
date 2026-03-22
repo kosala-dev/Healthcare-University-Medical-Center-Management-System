@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { FaArrowLeft, FaTimes, FaSearchPlus } from "react-icons/fa";
-import campusView from "../assets/images/slider/image02.jpg";
 
 export default function Gallery() {
   const navigate = useNavigate();
@@ -12,35 +11,35 @@ export default function Gallery() {
 
   const imageDetails = [
     { name: "Doctors Room", 
-      image: "/image01.png" 
+      image: "/images/image01.png" 
     },
     {
       name: "Medical Center Bed",
-      image: "/image02.jpg",
+      image: "/images/image02.jpg",
     },
     { name: "Reception Area", 
-      image: "/image03.jpg" 
+      image: "/images/image03.jpg" 
     },
     { name: "Waiting Lounge", 
-      image: "/image04.jpg" 
+      image: "/images/image04.jpg" 
     },
     {
       name: "Examination Room",
-      image: "/image05.jpg"
+      image: "/images/image05.jpg"
     },
     {
       name: "Pharmacy Section",
-      image: "/image06.jpg",
+      image: "/images/image06.jpg",
     },
     { name: "Emergency Unit",
-      image: "/image07.jpg" 
+      image: "/images/image07.jpg" 
     },
     {
       name: "Outpatient Clinic",
-      image: "/image08.jpg"
+      image: "/images/image08.jpg"
     },
     { name: "Campus View", 
-      image: campusView 
+      image: "/uov.jpg" 
     },
   ];
 
