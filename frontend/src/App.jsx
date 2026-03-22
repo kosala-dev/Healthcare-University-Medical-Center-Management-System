@@ -1,6 +1,6 @@
 import "react-toastify/dist/ReactToastify.css";
 import Home from "./pages/Home";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import Login from "./pages/Login";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -42,7 +42,7 @@ import MedicalFormsPatient from "./components/MedicalFormsPatient";
 import Diagnosisdetails from "./components/Diagnosisdetails";
 import MonthlyDrugReport from "./components/MonthlyDrugReport";
 
-const apiUrl = process.env.REACT_APP_API_URL;
+const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:8080";
 
 function App() {
   const [role, setRole] = useState("");
