@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { FaArrowLeft, FaTimes, FaSearchPlus } from "react-icons/fa";
+import campusView from "../assets/images/slider/image02.jpg";
 
 export default function Gallery() {
   const navigate = useNavigate();
@@ -10,27 +11,37 @@ export default function Gallery() {
   const [hoveredIndex, setHoveredIndex] = useState(null);
 
   const imageDetails = [
-    { name: "Doctors Room", image: "/src/assets/images/gallery/image01.png" },
+    { name: "Doctors Room", 
+      image: "/image01.png" 
+    },
     {
       name: "Medical Center Bed",
-      image: "/src/assets/images/gallery/image02.jpg",
+      image: "/image02.jpg",
     },
-    { name: "Reception Area", image: "/src/assets/images/gallery/image03.jpg" },
-    { name: "Waiting Lounge", image: "/src/assets/images/gallery/image04.jpg" },
+    { name: "Reception Area", 
+      image: "/image03.jpg" 
+    },
+    { name: "Waiting Lounge", 
+      image: "/image04.jpg" 
+    },
     {
       name: "Examination Room",
-      image: "/src/assets/images/gallery/image05.jpg",
+      image: "/image05.jpg"
     },
     {
       name: "Pharmacy Section",
-      image: "/src/assets/images/gallery/image06.jpg",
+      image: "/image06.jpg",
     },
-    { name: "Emergency Unit", image: "/src/assets/images/gallery/image07.jpg" },
+    { name: "Emergency Unit",
+      image: "/image07.jpg" 
+    },
     {
       name: "Outpatient Clinic",
-      image: "/src/assets/images/gallery/image08.jpg",
+      image: "/image08.jpg"
     },
-    { name: "Campus View", image: "/src/assets/images/slider/image02.jpg" },
+    { name: "Campus View", 
+      image: campusView 
+    },
   ];
 
   const openImage = (img) => {
