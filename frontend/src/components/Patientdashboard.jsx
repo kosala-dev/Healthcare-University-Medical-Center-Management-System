@@ -3,6 +3,8 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { jsPDF } from "jspdf";
 
+const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:8080";
+
 export default function PatientDashboard({ regnum }) {
   const navigate = useNavigate();
 
@@ -27,7 +29,7 @@ export default function PatientDashboard({ regnum }) {
   useEffect(() => {
     const fetchPatientDetails = async () => {
       try {
-        const meRes = await axios.get("http://localhost:8080/patient/me", {
+        const meRes = await axios.get(`${apiUrl}/patient/me`, {
           withCredentials: true,
         });
         if (meRes.data.success) {
@@ -40,7 +42,7 @@ export default function PatientDashboard({ regnum }) {
         if (regnum && !String(regnum).includes("@")) {
           try {
             const fallbackRes = await axios.get(
-              `http://localhost:8080/patient/patientdetails/${regnum}`
+              `${apiUrl}/patient/patientdetails/${regnum}`
             );
             if (fallbackRes.data.success) {
               setPatientDetails(fallbackRes.data.patdet);
@@ -82,7 +84,7 @@ export default function PatientDashboard({ regnum }) {
     if (resolvedRegnum) {
       setLoading(true);
       axios
-        .get(`http://localhost:8080/medicalhis/medical-history-user/${resolvedRegnum}`)
+        .get(`${apiUrl}/medicalhis/medical-history-user/${resolvedRegnum}`)
         .then((res) => {
           setMedicalHistories(res.data);
           setLoading(false);
