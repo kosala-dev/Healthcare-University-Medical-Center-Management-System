@@ -3,6 +3,8 @@ import { auth, provider } from "../firebase";
 import { signInWithPopup } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 
+const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:8080";
+
 function Login() {
   const navigate = useNavigate();
   const [msg, setMsg] = useState("");
@@ -15,7 +17,7 @@ function Login() {
 
       const idToken = await user.getIdToken();
 
-      const response = await fetch("http://localhost:8080/auth/firebase-login", {
+      const response = await fetch(`${apiUrl}/auth/firebase-login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -43,6 +45,7 @@ function Login() {
 
     } catch (error) {
       console.error("Error:", error.message);
+      setMsg("Login failed. Please try again.");
     }
   };
 
