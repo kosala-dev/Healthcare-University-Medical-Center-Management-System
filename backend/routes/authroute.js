@@ -12,6 +12,12 @@ const verifyPatient = require("../security/userauth");
 const verifyAdmin = require("../security/adminauth");
 
 const router = express.Router();
+const isProduction = process.env.NODE_ENV === "production";
+const cookieOptions = {
+  httpOnly: true,
+  sameSite: isProduction ? "none" : "lax",
+  secure: isProduction,
+};
 
 router.post("/firebase-login", async (req, res) => {
   try {
@@ -57,10 +63,7 @@ router.post("/firebase-login", async (req, res) => {
       { expiresIn: "1h" }
     );
 
-    res.cookie("token", jwtToken, {
-      httpOnly: true,
-      sameSite: "lax",
-    });
+    res.cookie("token", jwtToken, cookieOptions);
 
     res.json({ success: true, role });
 
@@ -70,7 +73,7 @@ router.post("/firebase-login", async (req, res) => {
 });
 
 router.get("/logout", (req, res) => {
-  res.clearCookie("token");
+  res.clearCookie("token", cookieOptions);
   res.json({ logout: true });
 });
 
