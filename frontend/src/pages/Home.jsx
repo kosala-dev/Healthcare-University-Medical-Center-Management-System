@@ -6,6 +6,8 @@ import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
+const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:8080";
+
 export default function Home({ role, userId }) {
   const navigate = useNavigate();
   const [currentTime, setCurrentTime] = useState(new Date());
@@ -18,7 +20,7 @@ export default function Home({ role, userId }) {
     const fetchPatientCount = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:8080/patient/countpatients"
+          `${apiUrl}/patient/countpatients`
         ); 
         setPatientCount(response.data.count ?? 0);
       } catch (error) {
