@@ -154,7 +154,7 @@ return (
         <Link to="/Gallery" onClick={() => setMenuOpen(false)}>Gallery</Link>
         <Link to="/Help" onClick={() => setMenuOpen(false)}>Help</Link>
 
-        <div className="pt-2 flex flex-col space-y-2">
+        <div className="pt-2 flex flex-col space-y-2 ">
           {role === "superadmin" && (
             <>
               <Button onClick={SuperGoAdmindDshboard}>Super Admin Dashboard</Button>
@@ -198,7 +198,7 @@ return (
           )}
 
           {isGuest && (
-            <Button onClick={goLogin}>LOGIN</Button>
+            <Button onClick={goLogin} className="border-2 border-[#ffcb00] bg-[#670047] hover:bg-[#670010] hover:border-[#ffcb00]">LOGIN</Button>
           )}
 
         </div>
