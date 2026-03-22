@@ -18,15 +18,23 @@ import notificationRoute from "./routes/notificationRoute.js";
 
 const app = express();
 
-// Allow localhost for dev, deployed URL for production
 const allowedOrigins = [
   "http://localhost:5173",
-  "https://uov-healthcaresystemproject.onrender.com"
+  ...(process.env.FRONTEND_URLS
+    ? process.env.FRONTEND_URLS.split(",").map((origin) => origin.trim()).filter(Boolean)
+    : []),
+  ...(process.env.FRONTEND_URL ? [process.env.FRONTEND_URL] : []),
 ];
 
 app.use(
   cors({
-    origin: allowedOrigins,
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+
+      return callback(new Error("Not allowed by CORS"));
+    },
     credentials: true,
   })
 );
